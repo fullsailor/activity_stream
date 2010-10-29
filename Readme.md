@@ -1,11 +1,9 @@
-# ActivityStream (early alpha)#
+# ActivityStream (early alpha) #
 
 Activity Stream provides a simple DSL to define, create,
 and retrieve user activities.
 
----
-
-##Installation##
+## Installation ##
 
 Add it to your Gemfile:
 
@@ -18,18 +16,20 @@ Run the generator:
 And migrate the database:
 
     rake db:migrate
-    
----
 
-##Usage##
+## Usage ##
 
-Define activities in `app/models/activities/example_action_activity.rb`:
+### Defining Activities ###
+
+In `app/models/activities/example_action_activity.rb`:
 
     Activity.define(:example_action) do
       metadata(:target, :default => :actor)
       metadata(:referrer)
       icon('example_activity_icon.png')
     end
+
+### Extending User ###
 
 In your User model:
 
@@ -43,10 +43,14 @@ In your User model:
       
     end
 
+### Retrieving Activities ###
+
 In your dashboard controller:
 
     @activity_stream = current_user.activity_stream
-    
+
+### Creating Activies ###
+
 When you want to create an activity:
 
     current_user.create_activity(:example_action,
@@ -54,7 +58,7 @@ When you want to create an activity:
                                  :referrer => @referrer)
 
 
-##Rails##
+## Notes ##
 
 Currently designed for Rails 2.3.10, because the project
 that prompted its creation is that version. I can't guarantee
