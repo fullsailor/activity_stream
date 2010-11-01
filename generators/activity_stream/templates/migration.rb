@@ -11,7 +11,7 @@ class CreateActivityStreamTables < ActiveRecord::Migration
     
     add_index :activities, [:actor_id, :actor_type]
     
-    <% unless has_user %>
+    <% unless has_users %>
       create_table :users do |t|
         t.string :name
       end
@@ -20,7 +20,7 @@ class CreateActivityStreamTables < ActiveRecord::Migration
   end
 
   def self.down
-    <% unless has_user %>
+    <% unless has_users %>
       drop_table :users
     <% end %>
     
