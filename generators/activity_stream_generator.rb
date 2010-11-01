@@ -16,7 +16,8 @@ class ActivityStreamGenerator < Rails::Generator::Base
       
       m.migration_template('migration.rb',
                            'db/migrate',
-                           :migration_file_name => 'create_activities')
+                           :migration_file_name => 'create_activity_stream',
+                           :assigns => {:has_users => ActiveRecord::Base.connection.table_exists?(:users)})
       
     end
   end
