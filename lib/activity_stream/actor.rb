@@ -21,11 +21,12 @@ module ActivityStream
   #   @user.activity_stream(:friends) # => <ActivityStream::Stream>
   module Actor
     
+    unloadable
     
-    def self.include(klass)
-      klass.extend(ClassMethods)
-      klass.class_eval do
-        has_many :activities
+    def self.included(base)
+      base.extend(ClassMethods)
+      base.class_eval do
+        has_many :activities, :as => :actor
         activity_stream(:all, :actors => :activity_stream_actors)
       end
     end
@@ -39,7 +40,7 @@ module ActivityStream
     # list of actors. 
     # @param name [Symbol] The key of a defined activity stream
     def activity_stream(name)
-      ActivityStream::Stream.new(name, self, @@defined_streams[name])
+      ActivityStream::Stream.new(name, self, self.class.defined_streams[name])
     end
     
     def activity_stream_actors
@@ -48,14 +49,18 @@ module ActivityStream
     
     module ClassMethods
       
+      # @attr_accessor defined_streams
+      attr_accessor :defined_streams
+      
       # Creates an activity_stream instance method that fetches 
       # all recent activity
       # 
       # @param name [Symbol] the name for the sub stream you wish to access
       # @option opts (see ActivityStream::Stream#new)
       def activity_stream(name, opts = {})
-        @@defined_streams ||= {}
-        @@defined_streams[name.to_sym] = opts
+        self.defined_streams ||= {}
+        self.defined_streams[name.to_sym] = opts
+        return nil
       end
       
     end
