@@ -1,4 +1,4 @@
-require 'activity_stream/definition'
+require 'spec_helper'
 
 describe ActivityStream::Definition do
   
