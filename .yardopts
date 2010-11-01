@@ -1,0 +1,4 @@
+'app/**/*.rb'
+'lib/**/*.rb'
+-
+Readme.md
