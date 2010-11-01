@@ -21,6 +21,13 @@ module ActivityStream
       @icon = filename
     end
     
+    # @param definition [Definition] The definition to be made available
+    # @return [Definition] Returns the registered definition
+    def self.register(definition)
+      @@definitions ||= []
+      @@definitions << definition
+      definition
+    end
   end
   
 end
