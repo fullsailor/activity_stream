@@ -1,5 +1,5 @@
 PATH
-  remote: ./../activity_stream
+  remote: ./../../../activity_stream
   specs:
     activity_stream (0.0.1)
 
