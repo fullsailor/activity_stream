@@ -1,0 +1,1 @@
+require 'activity_stream'
