@@ -12,8 +12,12 @@ module ActivityStream
       @collection = initialize_collection(opts[:actors])
     end
     
-    def activities
-      @activities ||= Activity.by_actors(@collection)
+    def activities(reload = false)
+      if @activities && !reload
+        @activities 
+      else 
+        @activities = Activity.by_actors(@collection)
+      end
     end
     
     private
