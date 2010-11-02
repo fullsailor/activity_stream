@@ -6,6 +6,10 @@ module ActivityStream
       
     end
     
+    def store
+      @store ||= {}
+    end
+    
   end
   
 end

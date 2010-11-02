@@ -33,12 +33,14 @@ class Activity < ActiveRecord::Base
   
   serialize :metadata, ActivityStream::Metadata
   
+  delegate :template, :icon, :to => :definition
+  
   def metadata
     self[:metadata] ||= ActivityStream::Metadata.new(self[:kind])
   end
   
   def definition
-    ActivityStream::Definition.all.find{|d| d.name == self[:kind].to_sym}
+    ActivityStream::Definition.find_by_name(self[:kind])
   end
 
 end

@@ -7,13 +7,19 @@ module ActivityStream
   end
   
   class Definition
-    
+
     attr_reader :name
     
     # @param name [Symbol] the unique name of the Activity 
     def initialize(name)
       @name = name.to_sym
       @metadata = {}
+    end
+    
+    # @param filename [String] the icon's name inside of the 
+    #  `public/images/activity_stream/icons` directory
+    def icon(filename)
+      @icon = filename
     end
     
     # @overload metadata
@@ -30,29 +36,42 @@ module ActivityStream
       end
     end
     
-    # @param filename [String] the icon's name inside of the 
-    #  `public/images/activity_stream/icons` directory
-    def icon(filename)
-      @icon = filename
+    #
+    def template
+      'activity'
     end
     
-    # @param definition [Definition] The definition to be made available
-    # @return [Definition] Returns the registered definition
-    def self.register(definition)
-      ActivityStream.definitions << definition
-      definition
-    end
-    
-    # List of registered definitions
-    # @return [Array<ActivityStream::Definition>]
-    # @example
-    #   ActivityStream::Definition.all # => []
-    #   Activity.define(:new_activity) do
-    #     ...
-    #   end
-    #   ActivityStream::Definition.all
-    def self.all
-      @@definitions ||= []
+    class << self 
+      # @param definition [Definition] The definition to be made available
+      # @return [Definition] Returns the registered definition
+      def register(definition)
+        self.all << definition
+        definition
+      end
+
+      # List of registered definitions
+      # @return [Array<ActivityStream::Definition>]
+      # @example
+      #   ActivityStream::Definition.all # => []
+      #   Activity.define(:new_activity) do
+      #     ...
+      #   end
+      #   ActivityStream::Definition.all
+      def all
+        @@definitions ||= []
+      end
+      
+      # Find a registered definition by its symbolic name
+      # @param name [Symbol] the name to find
+      # @return [ActivityStream::Definition]
+      def find_by_name(name)
+        unless definition = all.find{|d| d.name == name.to_sym}
+          raise ActivityStream::UndefinedActivity, "Could not find a definition for `#{name}`"
+        else
+          definition
+        end
+      end
+      
     end
     
   end
