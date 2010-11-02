@@ -21,8 +21,6 @@ module ActivityStream
   #   @user.activity_stream(:friends) # => <ActivityStream::Stream>
   module Actor
     
-    unloadable
-    
     def self.included(base)
       base.extend(ClassMethods)
       base.class_eval do
