@@ -11,9 +11,9 @@ class Activity < ActiveRecord::Base
     ActivityStream::Definition.register(definition)
   end
   
-  named_scope :in_reverse_chronological_order, :conditions => 'occurred_at DESC'
+  named_scope :in_reverse_chronological_order, :order => 'occurred_at DESC'
   
-  named_scope :in_chronological_order, :conditions => 'occurred_at ASC'
+  named_scope :in_chronological_order, :order => 'occurred_at ASC'
 
   # @param actors [Array] An array of [ActorClass, actor_id] sets
   #   or [ActorClass, [actor_id, actor_id, actor_id...]
