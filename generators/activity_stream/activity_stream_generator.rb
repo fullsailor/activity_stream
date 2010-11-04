@@ -6,8 +6,8 @@ class ActivityStreamGenerator < Rails::Generator::Base
   def manifest
     record do |m|
       
-      m.directory(File.join('app','models','activities'))
-      m.template('example_activity.rb', 'app/models/activities/example_activity.rb')
+      m.directory(File.join('config','initializers'))
+      m.template('initializer.rb', 'config/initializers/activity_stream.rb')
       
       user_model = 'app/models/user.rb'
       if File.exists?(user_model)
