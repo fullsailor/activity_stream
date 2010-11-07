@@ -25,23 +25,25 @@ module ActivityStream
       base.extend(ClassMethods)
       base.class_eval do
         has_many :activities, :as => :actor
-        activity_stream(:all, :actors => :activity_stream_actors)
+        activity_stream(:default, :actors => :followed_actors)
       end
     end
     
     # @param name [Symbol] An activity identifer defined by Activity.define
-    def create_activity(name)
-      
+    def publish_activity(name, metadata = {})
+      activity = ::Activity.new_with_name_and_metadata(name, metadata)
+      self.activities << activity
+      activity
     end
 
     # Creates and returns an ActivityStream::Stream for the predefined
     # list of actors. 
     # @param name [Symbol] The key of a defined activity stream
-    def activity_stream(name)
+    def activity_stream(name = :default)
       ActivityStream::Stream.new(name, self, self.class.defined_streams[name])
     end
-    
-    def activity_stream_actors
+    # Override this to change the default actors 
+    def followed_actors
       self.class.all.map{|actor| [actor.class, actor.id]}
     end
     
