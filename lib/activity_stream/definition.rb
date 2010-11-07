@@ -2,51 +2,35 @@ require 'active_support/core_ext/array/extract_options'
 
 module ActivityStream
   
-  def definitions
-    @@definitions ||= []
-  end
-  
+  # Defines a type of activity. You don't actually interact with this class directly.
   class Definition
 
-    attr_reader :name
-    
-    # @param name [Symbol] the unique name of the Activity 
-    def initialize(name)
-      @name = name.to_sym
-      @metadata = {}
+    attr_reader :name, :icon, :metadata, :template
+
+    # @param proxy [ActivityStream::DefinitionProxy] A constructed proxy that
+    #   will set the values for this Definition
+    def initialize(proxy)
+      @name = proxy[:name]
+      @metadata = proxy[:metadata] || {}
+      @template = proxy[:template] || 'activity'
+      @icon = proxy[:icon] || 'activity_icon.png'
     end
     
-    # @param filename [String] the icon's name inside of the 
-    #  `public/images/activity_stream/icons` directory
-    def icon(filename)
-      @icon = filename
+    def icon_path
+      'activity_stream/icons/%s' % self.icon
     end
-    
-    # @overload metadata
-    #   @return [Hash] A hash of defined metadata
-    # @overload metadata(name, opts = {})
-    #   @param name [Symbol] the unique name for the metadata attribute
-    #   @option opts :default The default value for that metadata
-    def metadata(*args)
-      if args.empty?
-        @metadata
-      else
-        opts = args.extract_options!
-        @metadata[args.first.to_sym] = opts
-      end
-    end
-    
-    #
-    def template
-      'activity'
-    end
-    
+
     class << self 
       # @param definition [Definition] The definition to be made available
       # @return [Definition] Returns the registered definition
       def register(definition)
-        self.all << definition
-        definition
+        definition = new(definition) if definition.is_a? DefinitionProxy
+        if definition.is_a? Definition
+          self.all << definition
+          definition
+        else
+          false
+        end
       end
 
       # List of registered definitions
@@ -58,15 +42,15 @@ module ActivityStream
       #   end
       #   ActivityStream::Definition.all
       def all
-        @@definitions ||= []
+        @definitions ||= []
       end
       
       # Find a registered definition by its symbolic name
       # @param name [Symbol] the name to find
       # @return [ActivityStream::Definition]
       def find_by_name(name)
-        unless definition = all.find{|d| d.name == name.to_sym}
-          raise ActivityStream::UndefinedActivity, "Could not find a definition for `#{name}`"
+        unless definition = all.find{|definition| definition.name == name.to_sym}
+          raise UndefinedActivity, "Could not find a definition for `#{name}`"
         else
           definition
         end
