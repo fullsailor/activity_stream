@@ -12,11 +12,13 @@ module ActivityStream
       @collection = initialize_collection(opts[:actors])
     end
     
+    # @param reload [Boolean] Return to the database for new activities
+    # @return the activities for the collection of actors
     def activities(reload = false)
       if @activities && !reload
         @activities 
       else 
-        @activities = Activity.by_actors(@collection)
+        @activities = ::Activity.by_actors(@collection)
       end
     end
     
