@@ -37,7 +37,7 @@ In your User model:
     
       include ActivityStream::Actor
       
-      def activity_stream_actors
+      def followed_actors
         [[User, 13], [User, 14], [Page, 9]]
       end
       
@@ -53,7 +53,7 @@ In your dashboard controller:
 
 When you want to create an activity:
 
-    current_user.create_activity(:example_action,
+    current_user.publish_activity(:example_action,
                                  :target => @friend,
                                  :referrer => @referrer)
 
