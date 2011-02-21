@@ -4,8 +4,8 @@ module ActivityStream
     
     # @param name [String] the name of the Stream
     # @param actor [ActivityStream::Actor]
-    # @option opts [Symbol] :actors (:activity_stream_actors) the method on
-    #   the user that should return an Array of [ActorClass, actor_id] items.
+    # @option opts [Symbol] :actors the method on the user that should return
+    #   an Array of [ActorClass, actor_id] items.
     def initialize(name, actor, opts = {})
       @name = name
       @actor = actor
@@ -18,6 +18,7 @@ module ActivityStream
       if @activities && !reload
         @activities 
       else 
+        # Todo: Eager load the :actor
         @activities = ::Activity.by_actors(@collection)
       end
     end

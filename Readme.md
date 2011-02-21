@@ -21,7 +21,7 @@ And migrate the database:
 
 ### Defining Activities ###
 
-In `app/models/activities/example_action_activity.rb`:
+In `config/initializers/activity_stream.rb`:
 
     Activity.define(:example_action) do
       metadata(:target, :default => :actor)

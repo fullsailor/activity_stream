@@ -26,6 +26,7 @@ module ActivityStream
       base.class_eval do
         has_many :activities, :as => :actor
         activity_stream(:default, :actors => :followed_actors)
+        activity_stream(:self, :actors => :self)
       end
     end
     

@@ -50,7 +50,7 @@ module ActivityStream
       # @return [ActivityStream::Definition]
       def find_by_name(name)
         unless definition = all.find{|definition| definition.name == name.to_sym}
-          raise UndefinedActivity, "Could not find a definition for `#{name}`"
+          raise ActivityStream::UndefinedActivity, "Could not find a definition for `#{name}`"
         else
           definition
         end
