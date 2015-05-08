@@ -1,5 +1,7 @@
 # ActivityStream (early alpha) #
 
+![unmaintained](http://img.shields.io/badge/status-unmaintained-red.png)
+
 Activity Stream provides a simple DSL to define, create,
 and retrieve user activities.
 
